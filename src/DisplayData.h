@@ -9,6 +9,7 @@ struct DisplayData
     bool _isCelsius;
 
     static const byte segmentCodes[10];
+    static const byte symbolCode[3];
 
     DisplayData();//error
     DisplayData(int value, bool isCelsius);

@@ -6,10 +6,11 @@
 DisplayManager displayManager;
 
 unsigned long lastUpdate = 0;
-const unsigned timeUpdateData = 500;
+const unsigned timeUpdateData = 5000;
 
 //for test
 int temperature = 0;
+bool isCelsius = true;
 
 void setup() 
 {
@@ -24,15 +25,16 @@ void loop()
   
   if (millis() - lastUpdate > timeUpdateData) {
     lastUpdate = millis();
-    
-    temperature = (temperature + 1) % 100;
-    bool isCelsius = true;
+    //srand(millis());
+    temperature = (rand() % 90) - 40; //(temperature + 1) % 100;
+    Serial.println(rand());
+    isCelsius = !isCelsius;
 
     DisplayData newData(temperature, isCelsius);
     displayManager.setValue(newData);
     
-    Serial.print("Temperature: ");
+    Serial.print(isCelsius ? "Temperature: " : "Percent: ");
     Serial.print(temperature);
-    Serial.println("C");
+    Serial.println(isCelsius ? "C" : "%");
   }
 }
