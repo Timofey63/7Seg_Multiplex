@@ -1,51 +1,38 @@
 #include <Arduino.h>
-#include "digit.h"
+#include "DisplayManager.h"
+#include "DisplayData.h"
+//https://github.com/Timofey63/7Seg_Multiplex
 
-//(D5, D6, D7)
-const int COUNT_DIGITS = 3;
-Digit digits[COUNT_DIGITS] = {Digit(5), Digit(6), Digit(7)};
+DisplayManager displayManager;
 
-// Таймеры и состояния
-unsigned long previousDigitTime = 0;
-const long digitInterval = 1000;
-int currentDigit = 0;
+unsigned long lastUpdate = 0;
+const unsigned timeUpdateData = 500;
 
-//вывод
-unsigned long previousOutputTime = 0;
-const long outputInterval = 3;
-int activePinIndex = 0;
+//for test
+int temperature = 0;
 
 void setup() 
 {
   Serial.begin(9600);
-
-  Digit::allSetup();
-  for (int i = 0; i < COUNT_DIGITS; i++) 
-  {
-    digits[i].begin();
-  }
+  displayManager.begin();
+  Serial.println("Display initialized");
 }
 
 void loop() 
 {
-  unsigned long currentMillis = millis();
+  displayManager.update();
   
-  // тестовый таймер
-  if (currentMillis - previousDigitTime >= digitInterval) 
-  {
-    previousDigitTime = currentMillis;
+  if (millis() - lastUpdate > timeUpdateData) {
+    lastUpdate = millis();
     
-    currentDigit = (currentDigit + 1) % 10;
-  }
+    temperature = (temperature + 1) % 100;
+    bool isCelsius = true;
 
-  // основной вывод
-  if (currentMillis - previousOutputTime >= outputInterval) 
-  {
-    previousOutputTime = currentMillis;
-
-    digits[activePinIndex].off();
-    activePinIndex = (activePinIndex + 1) % 3;
-    digits[activePinIndex].on();
-    digits[activePinIndex].display(currentDigit);
+    DisplayData newData(temperature, isCelsius);
+    displayManager.setValue(newData);
+    
+    Serial.print("Temperature: ");
+    Serial.print(temperature);
+    Serial.println("C");
   }
 }
