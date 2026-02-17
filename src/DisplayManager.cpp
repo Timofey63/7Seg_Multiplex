@@ -35,6 +35,9 @@ void DisplayManager::begin()
 void DisplayManager::setValue(DisplayData data)
 {
     currentData = data;
+
+    displays[0].fsm.start();
+    displays[1].fsm.start();
 }
 
 void DisplayManager::update()
@@ -51,8 +54,22 @@ void DisplayManager::update()
         }
 
         activeDisplayIndex = (activeDisplayIndex + 1) % displayCount;
+        displays[activeDisplayIndex].fsm.update();
 
-        byte segmentCode = currentData.get(activeDisplayIndex);
+        byte segmentCode;
+        if(displays[activeDisplayIndex].fsm.isActive())
+        {
+            segmentCode = currentData.get(activeDisplayIndex);
+        }
+        else
+        {
+            //TODO
+            segmentCode = currentData.get(activeDisplayIndex) & B00000000;
+        }
+        byte mask = displays[activeDisplayIndex].fsm.getMask();
+        segmentCode = segmentCode & mask;
+            
+
         shiftOutData(segmentCode);
 
         displays[activeDisplayIndex].on();

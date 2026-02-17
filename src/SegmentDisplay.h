@@ -2,6 +2,7 @@
 #define DIGIT_H
 
 #include <Arduino.h>
+#include <SegmentFSM.h>
 
 class SegmentDisplay
 {
@@ -10,6 +11,7 @@ private:
     int _currentValue;
 
 public:
+    SegmentFSM fsm;
     SegmentDisplay();//error
     SegmentDisplay(int outputPin);
     

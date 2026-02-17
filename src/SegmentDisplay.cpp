@@ -2,11 +2,13 @@
 
 SegmentDisplay::SegmentDisplay(int outputPin)
 {
+    fsm = SegmentFSM();
     _outputPin = outputPin;
 }
 
 SegmentDisplay::SegmentDisplay()
 {
+    fsm = SegmentFSM();
     _outputPin = -1; //error
 }
 
