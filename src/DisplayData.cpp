@@ -45,7 +45,6 @@ byte DisplayData::get(int index)
     case 1:
         return segmentCodes[absValue % 10];
     case 2:
-        // implementation later
         if(_isCelsius)
         {
             if(isNegative)

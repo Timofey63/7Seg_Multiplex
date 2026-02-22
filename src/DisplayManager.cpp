@@ -48,26 +48,19 @@ void DisplayManager::update()
     {
         previousOutputTime = currentMillis;
 
-        for (int i = 0; i < displayCount; i++)
-        {
-            displays[i].off();
-        }
-
+        displays[activeDisplayIndex].off();
         activeDisplayIndex = (activeDisplayIndex + 1) % displayCount;
-        fsm.update();
 
-        byte segmentCode;
-        if(fsm.isActive())
+        fsm.update();
+        if (fsm.dataSwitched)
         {
             currentData = newData;
+            fsm.dataSwitched = false;
         }
-        segmentCode = currentData.get(activeDisplayIndex);
-        byte mask = fsm.getMask();
-        segmentCode = segmentCode & mask;
-            
 
+        byte segmentCode = currentData.get(activeDisplayIndex);
+        segmentCode &= fsm.getMask();
         shiftOutData(segmentCode);
-
         displays[activeDisplayIndex].on();
     }
 }

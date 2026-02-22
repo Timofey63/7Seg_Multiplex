@@ -28,16 +28,12 @@ byte SegmentFSM::getMask()
     return stateCode[0];
 }
 
-bool  SegmentFSM::isActive()
-{
-    return state != FADE_OUT;
-}
-
 void SegmentFSM::start()
 {
     state = FADE_OUT;
     step = 0;
     timer = millis();
+    dataSwitched = false;
 }
 
 SegmentFSM::SegmentFSM()
@@ -62,6 +58,7 @@ void SegmentFSM::update()
         {
             state = FADE_IN;
             step = 0;
+            dataSwitched = true;
         }
         break;
     case FADE_IN:

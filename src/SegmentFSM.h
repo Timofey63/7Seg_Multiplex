@@ -15,7 +15,7 @@ public:
     void start();
     void update();
     byte getMask();
-    bool isActive();
+    bool dataSwitched = false;
 
 private:
     State state;// IDLE
