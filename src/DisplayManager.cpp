@@ -6,7 +6,8 @@ const int DisplayManager::latchPin = 4;
 
 DisplayManager::DisplayManager()
 {
-    displayCount = 3;
+    fsm = SegmentFSM();
+
     displays[0] = SegmentDisplay(7);
     displays[1] = SegmentDisplay(6);
     displays[2] = SegmentDisplay(5);
@@ -21,7 +22,7 @@ void DisplayManager::shiftOutData(byte data)
 
 void DisplayManager::begin()
 {
-    // Настройка пинов для 74HC595
+    // Setting pin for 74HC595
     pinMode(dataPin, OUTPUT);
     pinMode(clockPin, OUTPUT);
     pinMode(latchPin, OUTPUT);
@@ -36,8 +37,7 @@ void DisplayManager::setValue(DisplayData data)
 {
     currentData = data;
 
-    displays[0].fsm.start();
-    displays[1].fsm.start();
+    fsm.start();
 }
 
 void DisplayManager::update()
@@ -54,19 +54,19 @@ void DisplayManager::update()
         }
 
         activeDisplayIndex = (activeDisplayIndex + 1) % displayCount;
-        displays[activeDisplayIndex].fsm.update();
+        fsm.update();
 
         byte segmentCode;
-        if(displays[activeDisplayIndex].fsm.isActive())
+        if(fsm.isActive())
         {
             segmentCode = currentData.get(activeDisplayIndex);
         }
         else
         {
             //TODO
-            segmentCode = currentData.get(activeDisplayIndex) & B00000000;
+            //segmentCode = currentData.get(activeDisplayIndex) & B00000000;
         }
-        byte mask = displays[activeDisplayIndex].fsm.getMask();
+        byte mask = fsm.getMask();
         segmentCode = segmentCode & mask;
             
 

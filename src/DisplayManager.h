@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <DisplayData.h>
 #include "SegmentDisplay.h"
+#include <SegmentFSM.h>
 
 class DisplayManager
 {
@@ -13,7 +14,7 @@ private:
     static const int latchPin;
     static const byte digits[10];
 
-    int displayCount;     
+    int displayCount = 3;     
     SegmentDisplay displays[3];
     DisplayData currentData;
 
@@ -21,6 +22,7 @@ private:
     const unsigned long outputInterval = 3;
     int activeDisplayIndex;
 public:
+    SegmentFSM fsm;
     DisplayManager();
     void shiftOutData(byte data);
     void begin();

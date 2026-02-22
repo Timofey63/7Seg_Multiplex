@@ -18,11 +18,11 @@ public:
     bool isActive();
 
 private:
-    State state;// = IDLE;
+    State state;// IDLE
 
-    unsigned long timer;// = 0;
-    unsigned stepTime;// = 100;
+    unsigned long timer;
+    unsigned stepTime;
 
-    int step;// = 0;
+    int step;
     static const byte stateCode[6];
 };
