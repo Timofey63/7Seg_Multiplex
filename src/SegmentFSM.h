@@ -16,6 +16,7 @@ public:
     void update();
     byte getMask();
     bool dataSwitched = false;
+    void setOnDisplayOffCallback(void (*callback)());
 
 private:
     State state;// IDLE
@@ -25,4 +26,5 @@ private:
 
     int step;
     static const byte stateCode[6];
+    void (*onDisplayOffCallback)();
 };

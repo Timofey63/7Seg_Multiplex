@@ -36,7 +36,6 @@ void DisplayManager::begin()
 void DisplayManager::setValue(DisplayData data)
 {
     newData = data;
-
     fsm.start();
 }
 

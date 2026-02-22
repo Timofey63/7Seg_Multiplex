@@ -6,16 +6,17 @@
 DisplayManager displayManager;
 Adafruit_AHTX0 aht;
 
-unsigned long lastUpdate = 0;
-const unsigned timeUpdateData = 5000;
+const unsigned timeUpdateDisplay = 5000;
+unsigned long lastUpdateDisplay;
 
+int tempDisplay, himDisplay;
 bool isCelsius = true;
-int setValueDispay();
+
+void setValueDispay(), onDisplayOff();
 
 void setup() 
 {
   Serial.begin(9600);
-  displayManager.begin();
 
   if (!aht.begin()) 
   {
@@ -23,36 +24,42 @@ void setup()
     while (1) delay(100);
   }
 
+  displayManager.begin();
+
+  displayManager.fsm.setOnDisplayOffCallback(onDisplayOff);
   Serial.println("Display initialized");
 }
 
 void loop() 
 {
-  displayManager.update();
-  
-  if (millis() - lastUpdate > timeUpdateData) 
+  if (millis() - lastUpdateDisplay > timeUpdateDisplay) 
   {
-    lastUpdate = millis();
+    lastUpdateDisplay = millis();
     
-    int valueDisplay = setValueDispay();
-    
-    Serial.print(isCelsius ? "Temperature: " : "Percent: ");
-    Serial.print(valueDisplay);
-    Serial.println(isCelsius ? "°C" : "%");
+    setValueDispay();
   }
+
+  displayManager.update();
 }
 
-int setValueDispay()
+void setValueDispay()
 {
-  sensors_event_t humidity, temperature;
-  aht.getEvent(&humidity, &temperature);
-    
   isCelsius = !isCelsius;
-  int valueDisplay = isCelsius ? temperature.temperature :
-    humidity.relative_humidity;
+  int valueDisplay = isCelsius? tempDisplay : himDisplay;
   DisplayData newData(valueDisplay, isCelsius);
 
   displayManager.setValue(newData);
 
-  return valueDisplay;
+  Serial.print(isCelsius ? "Temperature: " : "Percent: ");
+  Serial.print(valueDisplay);
+  Serial.println(isCelsius ? "°C" : "%");
+}
+
+void onDisplayOff()
+{
+  sensors_event_t humidity, temperature;
+  aht.getEvent(&humidity, &temperature);
+  
+  tempDisplay = temperature.temperature;
+  himDisplay = humidity.relative_humidity;
 }

@@ -28,6 +28,11 @@ byte SegmentFSM::getMask()
     return stateCode[0];
 }
 
+void SegmentFSM::setOnDisplayOffCallback(void (*callback)())
+{
+    onDisplayOffCallback = callback;
+}
+
 void SegmentFSM::start()
 {
     state = FADE_OUT;
@@ -56,6 +61,10 @@ void SegmentFSM::update()
         step++;
         if(step >= 6)
         {
+            //Invoke read sensor
+            if (onDisplayOffCallback != NULL) {
+                onDisplayOffCallback();
+            }
             state = FADE_IN;
             step = 0;
             dataSwitched = true;
