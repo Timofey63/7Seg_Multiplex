@@ -1,9 +1,9 @@
-код ардуины микросхемы мультипликации 74HC595 для 3 сегментов:
-1- десятки
-2- единицы
-3- минус, процент и цельсия
+Arduino code for the 74HC595 multiplication chip for 3 segments that display:
+1- tens
+2- units
+3- minus, percentage, and Celsius
 
-каждый сегмент активируется раз в 3мс. Вывод температуры и влажности происходит раз в 5с. Значения поступают с датчика aht10. Есть анимация с затуханием и возгоранием реализованную через FSM
+each segment is activated once every 3 ms. The temperature and humidity are displayed once every 5 s. The values are received from the aht10 sensor. There is an animation with fading and rekindling implemented through FSM
 
 https://github.com/user-attachments/assets/8dba80c3-f375-44ea-830f-08d0c1733f0e
 
