@@ -35,7 +35,7 @@ void DisplayManager::begin()
 
 void DisplayManager::setValue(DisplayData data)
 {
-    currentData = data;
+    newData = data;
 
     fsm.start();
 }
@@ -59,13 +59,9 @@ void DisplayManager::update()
         byte segmentCode;
         if(fsm.isActive())
         {
-            segmentCode = currentData.get(activeDisplayIndex);
+            currentData = newData;
         }
-        else
-        {
-            //TODO
-            //segmentCode = currentData.get(activeDisplayIndex) & B00000000;
-        }
+        segmentCode = currentData.get(activeDisplayIndex);
         byte mask = fsm.getMask();
         segmentCode = segmentCode & mask;
             

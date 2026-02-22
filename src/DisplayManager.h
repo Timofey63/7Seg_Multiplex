@@ -16,7 +16,7 @@ private:
 
     int displayCount = 3;     
     SegmentDisplay displays[3];
-    DisplayData currentData;
+    DisplayData currentData, newData;
 
     unsigned long previousOutputTime;
     const unsigned long outputInterval = 3;

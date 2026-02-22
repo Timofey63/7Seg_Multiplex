@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include "DisplayManager.h"
-#include "DisplayData.h"
 #include <Adafruit_AHTX0.h>
 //https://github.com/Timofey63/7Seg_Multiplex
 
